@@ -41,18 +41,21 @@ const useSearch = (defaultSearchFormula) => {
         for   (const chem of listOfChems.data.results) {
           let chemProps = await rsc.get(`/records/${chem}/details`,{
             params:{
-              "fields" : "commonname,nominalmass,averagemass,referencecount,smiles"
+              "fields" : "commonname,nominalmass,averagemass,referencecount,smiles,inchiKey"
               }
           });
+
 
           let chemImg = await rsc.get(`/records/${chem}/image`);
           chemProps.data.img = chemImg.data.image;
           chemProps.data.cid= await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${chemProps.data.smiles}/cids/TXT`);
+          //let chemImg = await  axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${chemProps.data.cid}/PNG`);
+          //chemProps.data.cid= await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/${chemProps.data.inchiKey}/cids/TXT`);
 
           try {
             chemProps.data.description = await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${chemProps.data.smiles}/description/json`);
           } catch (e) {
-            chemProps.data.description =false;
+            chemProps.data.description = {"data": {"InformationList" : {"Information" : ""}}};
           }
 
           chemData.push(chemProps.data);

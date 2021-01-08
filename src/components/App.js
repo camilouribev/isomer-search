@@ -1,14 +1,14 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import useSearch from '../hooks/useSearch';
+import useSearchBeta from '../hooks/useSearchBeta';
 import ChemList from './ChemList';
 
 
 const App = () => {
 
-  const [res, search, loader] = useSearch('NH3');
+  const [res, search, loader] = useSearchBeta('C6H10O5');
 
-  console.log(res);
   return (
     <div className='ui container'>
       <SearchBar onFormSubmit={search} />
