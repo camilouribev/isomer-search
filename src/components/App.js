@@ -1,13 +1,12 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import useSearch from '../hooks/useSearch';
-import useSearchBeta from '../hooks/useSearchBeta';
 import ChemList from './ChemList';
 
 
 const App = () => {
 
-  const [res, search, loader] = useSearchBeta('C6H10O5');
+  const [res, search, loader] = useSearch('CH3COOH');
 
   return (
     <div className='ui container'>

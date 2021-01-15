@@ -1,7 +1,6 @@
 import { useState, useEffect} from 'react';
-import rsc from '../apis/rsc';
+import PubChem from '../apis/PubChem';
 import useLoadingPage from './useLoadingPage'
-import axios from 'axios';
 
 const useSearch = (defaultSearchFormula) => {
   const [res, setRes] = useState([]);
@@ -16,65 +15,79 @@ const useSearch = (defaultSearchFormula) => {
 
   const search = async (term) => {
     showLoader();
-
     try {
-      const id = await rsc.post('/filter/formula',{
-          "formula": term,
-          "orderBy": "referenceCount"
-        }, );
+    const listOfChems = await PubChem.get(`/fastformula/${term}/cids/JSON?MaxRecords=10`);
 
-        const listOfChems = await rsc.get(`/filter/${id.data.queryId}/results`,{
-          params:{
-            "start": 0,
-            "count": 7
-          }
-        });
+    const chemData = [];
 
-        if (listOfChems.data.results.length === 0) {
-          hideLoader();
-          setRes(false);
-          return
+      if (listOfChems.data.IdentifierList.CID.length === 0) {
+        hideLoader();
+        setRes(false);
+        return
+      };
+
+      for   (const chem of listOfChems.data.IdentifierList.CID) {
+        let item = {};
+        item.cid = chem;
+
+        try {
+          let commonName = await PubChem.get(`/cid/${chem}/synonyms/JSON?MaxRecords=6`);
+          item.commonName =commonName.data.InformationList.Information[0].Synonym;
+
+        } catch (e) {
+          item.commonName = "";
         }
 
-        const chemData = [];
+        item.img = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${chem}/PNG?record_type=2d&image_size=large`;
 
-        for   (const chem of listOfChems.data.results) {
-          let chemProps = await rsc.get(`/records/${chem}/details`,{
-            params:{
-              "fields" : "commonname,nominalmass,averagemass,referencecount,smiles,inchiKey"
-              }
-          });
+        try {
+          let props = await PubChem.get(`/cid/${chem}/property/MolecularWeight,Charge,IUPACName/csv`);
 
+          props = props.data.split(',');
+          item.molWeight = props[4];
+          item.charge = props[5];
 
-          let chemImg = await rsc.get(`/records/${chem}/image`);
-          chemProps.data.img = chemImg.data.image;
-          chemProps.data.cid= await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${chemProps.data.smiles}/cids/TXT`);
-          //let chemImg = await  axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${chemProps.data.cid}/PNG`);
-          //chemProps.data.cid= await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/${chemProps.data.inchiKey}/cids/TXT`);
+          if (props.length < 7) {
+            item.IUPACName = props[6];
+          } else {
+            item.IUPACName = props.slice( 6, props.length - 1).join(',');
+          }
 
-          try {
-            chemProps.data.description = await axios.get(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${chemProps.data.smiles}/description/json`);
+        } catch (e) {
+          item.props = "error"
+        }
+
+        try {
+          item.description = await PubChem.get(`/cid/${chem}/description/JSON`);
           } catch (e) {
-            chemProps.data.description = {"data": {"InformationList" : {"Information" : ""}}};
+            item.description = {"data": {"InformationList" : {"Information" : ""}}};
           }
-
-          chemData.push(chemProps.data);
-          console.log(chemProps);
+        if (item.commonName == "") {
 
         }
-        chemData.sort((a, b) => parseFloat(b.referenceCount) - parseFloat(a.referenceCount)); // orden descendente de referencias
+        else {
+          chemData.push(item);
+        }
+
+
+        }
         setRes(chemData);
         hideLoader();
 
-    } catch (e) {
+    }
+    catch (e) {
         hideLoader ();
         setRes('error');
+        console.log('fug');
       }
+
 
   };
   return [res, search, loader];
 
 };
+
+
 
 
 export default useSearch;
