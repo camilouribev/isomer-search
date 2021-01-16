@@ -9,13 +9,15 @@ const App = () => {
   const [res, search, loader] = useSearch('CH3COOH');
 
   return (
-    <div className='ui container'>
+    <div className='ui container' >
       <SearchBar onFormSubmit={search} />
-        <div className='ui items'>
-        {loader}
+        <div >
+          <div>
+           <ChemList foundChems={res} />
+          </div>
 
-         <ChemList foundChems={res} />
        </div>
+      {loader}
     </div>
 
   );
