@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/isomer-search/static/css/main.5c7eb3f1.chunk.css",
+    "main.js": "/isomer-search/static/js/main.9bd90e41.chunk.js",
+    "main.js.map": "/isomer-search/static/js/main.9bd90e41.chunk.js.map",
+    "runtime-main.js": "/isomer-search/static/js/runtime-main.86f0b4df.js",
+    "runtime-main.js.map": "/isomer-search/static/js/runtime-main.86f0b4df.js.map",
+    "static/js/2.0a26233d.chunk.js": "/isomer-search/static/js/2.0a26233d.chunk.js",
+    "static/js/2.0a26233d.chunk.js.map": "/isomer-search/static/js/2.0a26233d.chunk.js.map",
+    "index.html": "/isomer-search/index.html",
+    "static/css/main.5c7eb3f1.chunk.css.map": "/isomer-search/static/css/main.5c7eb3f1.chunk.css.map",
+    "static/js/2.0a26233d.chunk.js.LICENSE.txt": "/isomer-search/static/js/2.0a26233d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.86f0b4df.js",
+    "static/js/2.0a26233d.chunk.js",
+    "static/css/main.5c7eb3f1.chunk.css",
+    "static/js/main.9bd90e41.chunk.js"
+  ]
+}
