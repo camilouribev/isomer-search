@@ -2,11 +2,16 @@ import React from 'react';
 
 const FormatError = () => {
   return(
-    <div className="ui message">
-      <div className="header">
-        <h2>FORMAT ERROR</h2>
+    <div className="ui message typing-error">
+      <div className="header error">
+        <h2 className="title">NOT FOUND</h2>
       </div>
-        <p>Please try writing your chemical formula with correct capitalization, avoiding parentheses and blankspaces </p>
+
+        <ul>
+          <li style={{paddingBottom: "2%"}}><p className="description">The compound you are looking for was not found. It may not exist.</p></li>
+
+          <li><p className="description">If you are sure It does, please try  writing the formula again, with correct capitalization, avoiding parentheses and blank spaces.</p></li>
+        </ul>
     </div>
   );
 

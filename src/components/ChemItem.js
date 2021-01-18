@@ -1,5 +1,4 @@
 import React from 'react';
-import Chem3D from './Chem3D';
 import './ChemItem.css';
 import Accordion from './Accordion.js'
 

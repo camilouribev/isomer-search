@@ -9,37 +9,31 @@ const useSearch = (defaultSearchFormula) => {
 
    useEffect(() =>{
       search(defaultSearchFormula);
-
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultSearchFormula]);
 
 
   const search = async (term) => {
     showLoader();
+
     try {
-    const listOfChems = await PubChem.get(`/fastformula/${term}/cids/JSON?MaxRecords=10`);
 
-    const chemData = [];
+      const listOfChems = await PubChem.get(`/fastformula/${term}/cids/JSON?MaxRecords=10`);
 
-      if (listOfChems.data.IdentifierList.CID.length === 0) {
-        hideLoader();
-        setRes(false);
-        return
-      };
+      const chemData = [];
 
-      for   (const chem of listOfChems.data.IdentifierList.CID) {
+      for (const chem of listOfChems.data.IdentifierList.CID) {
         let item = {};
         item.cid = chem;
 
         try {
           let commonName = await PubChem.get(`/cid/${chem}/synonyms/JSON?MaxRecords=6`);
           item.commonName =commonName.data.InformationList.Information[0].Synonym;
-
         } catch (e) {
           item.commonName = "";
         }
 
         item.img = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${chem}/PNG?record_type=2d&image_size=large`;
-
         try {
           let props = await PubChem.get(`/cid/${chem}/property/MolecularWeight,Charge,IUPACName/csv`);
 
@@ -62,27 +56,25 @@ const useSearch = (defaultSearchFormula) => {
           } catch (e) {
             item.description = {"data": {"InformationList" : {"Information" : ""}}};
           }
-        if (item.commonName == "") {
+        if (item.commonName === "") {
 
         }
         else {
           chemData.push(item);
         }
 
-
         }
         setRes(chemData);
         hideLoader();
-
     }
     catch (e) {
-        hideLoader ();
-        setRes('error');
-        console.log('fug');
+
+          hideLoader ();
+          setRes('error');
+
       }
-
-
   };
+
   return [res, search, loader];
 
 };

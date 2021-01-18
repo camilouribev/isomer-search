@@ -10,30 +10,26 @@ const SearchBar = ({onFormSubmit}) => {
 
   return (
     <div className='sixteen wide column search-bar' >
-      <form   className="form" onSubmit={onSubmit} >
+      <form   className="form-field" onSubmit={onSubmit} >
         <div >
           <div  >
             <div className="title-white">
               <label >Isomer Search  </label>
             </div>
             <div >
+
               <input
                 className="input-mod"
                 type="text"
                 value={term}
                 onChange={(event) => setTerm(event.target.value)}
-                placeholder="Please write a chemical formula (eg: 'NH3')"
+                placeholder="Please write a chemical formula (ex: 'NH3')"
               />
-              <span>
-                <button className="btn" >
-                    <div class="ui animated button" tabIndex="0">
-                      <div class="visible content description ">Search</div>
-                      <div class="hidden content">
-                        <i class="search icon"></i>
-                      </div>
-                    </div>
-                </button>
-              </span>
+
+              <button >
+                      <i className="search icon"></i>
+              </button>
+
             </div>
 
           </div>

@@ -6,9 +6,9 @@ import ChemList from './ChemList';
 
 const App = () => {
 
-  const [res, search, loader] = useSearch('CH3COOH');
+  const [res, search, loader] = useSearch('H2SO4');
 
-  return (
+    return (
     <div className='ui container' >
       <SearchBar onFormSubmit={search} />
         <div >
